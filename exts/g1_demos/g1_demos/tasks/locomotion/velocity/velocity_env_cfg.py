@@ -17,7 +17,7 @@ from omni.isaac.lab.terrains import TerrainImporterCfg
 from omni.isaac.lab.utils import configclass
 from omni.isaac.lab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 
-import g1_template.tasks.locomotion.velocity.mdp as mdp
+import g1_demos.tasks.locomotion.velocity.mdp as mdp
 
 ##
 # Pre-defined configs
