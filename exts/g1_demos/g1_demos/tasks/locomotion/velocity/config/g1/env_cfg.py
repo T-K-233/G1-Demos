@@ -7,6 +7,7 @@ import g1_demos.tasks.locomotion.velocity.mdp as mdp
 from g1_demos.tasks.locomotion.velocity.velocity_env_cfg import (
     LocomotionVelocityRoughEnvCfg,
     RewardsCfg,
+    ActionsCfg,
 )
 
 ##
@@ -98,6 +99,28 @@ class G1Rewards(RewardsCfg):
         params={"asset_cfg": SceneEntityCfg("robot", joint_names="torso_joint")},
     )
 
+leg_joints = [
+    "left_hip_pitch_joint",
+    "left_hip_roll_joint",
+    "left_hip_yaw_joint",
+    "left_knee_joint",
+    "left_ankle_pitch_joint",
+    "left_ankle_roll_joint",
+
+    "right_hip_pitch_joint",
+    "right_hip_roll_joint",
+    "right_hip_yaw_joint",
+    "right_knee_joint",
+    "right_ankle_pitch_joint",
+    "right_ankle_roll_joint",
+]
+
+@configclass
+class LegOnlyActionsCfg(ActionsCfg):
+    """Action specifications for the MDP."""
+
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=leg_joints, scale=0.5, use_default_offset=True)
+
 
 @configclass
 class TerminationsCfg:
@@ -177,7 +200,7 @@ class G1EnvCfg_PLAY(G1EnvCfg):
         super().__post_init__()
 
         # make a smaller scene for play
-        self.scene.num_envs = 50
+        self.scene.num_envs = 8
         self.scene.env_spacing = 2.5
         self.episode_length_s = 40.0
         # spawn the robot randomly in the grid (instead of their terrain levels)
@@ -197,3 +220,14 @@ class G1EnvCfg_PLAY(G1EnvCfg):
         # remove random pushing
         self.events.base_external_force_torque = None
         self.events.push_robot = None
+
+
+class G1LegOnlyEnvCfg(G1EnvCfg):
+    def __post_init__(self):
+        super().__post_init__()
+        self.actions: ActionsCfg = LegOnlyActionsCfg()
+
+class G1LegOnlyEnvCfg_PLAY(G1EnvCfg_PLAY):
+    def __post_init__(self):
+        super().__post_init__()
+        self.actions: ActionsCfg = LegOnlyActionsCfg()

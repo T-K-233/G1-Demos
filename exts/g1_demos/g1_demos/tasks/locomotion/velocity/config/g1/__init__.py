@@ -15,10 +15,8 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": env_cfg.G1EnvCfg,
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
-        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_rough_ppo_cfg.yaml",
     },
 )
-
 
 gym.register(
     id="Velocity-G1-Play-v0",
@@ -27,6 +25,26 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": env_cfg.G1EnvCfg_PLAY,
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
-        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_rough_ppo_cfg.yaml",
+    },
+)
+
+
+gym.register(
+    id="Velocity-G1-LegOnly-v0",
+    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": env_cfg.G1LegOnlyEnvCfg,
+        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
+    },
+)
+
+gym.register(
+    id="Velocity-G1-LegOnly-Play-v0",
+    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": env_cfg.G1LegOnlyEnvCfg_PLAY,
+        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
     },
 )
