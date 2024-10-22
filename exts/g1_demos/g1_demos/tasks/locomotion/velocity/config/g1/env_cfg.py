@@ -99,29 +99,6 @@ class G1Rewards(RewardsCfg):
         params={"asset_cfg": SceneEntityCfg("robot", joint_names="torso_joint")},
     )
 
-leg_joints = [
-    "left_hip_pitch_joint",
-    "left_hip_roll_joint",
-    "left_hip_yaw_joint",
-    "left_knee_joint",
-    "left_ankle_pitch_joint",
-    "left_ankle_roll_joint",
-
-    "right_hip_pitch_joint",
-    "right_hip_roll_joint",
-    "right_hip_yaw_joint",
-    "right_knee_joint",
-    "right_ankle_pitch_joint",
-    "right_ankle_roll_joint",
-]
-
-@configclass
-class LegOnlyActionsCfg(ActionsCfg):
-    """Action specifications for the MDP."""
-
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=leg_joints, scale=0.5, use_default_offset=True)
-
-
 @configclass
 class TerminationsCfg:
     """Termination terms for the MDP."""
@@ -222,6 +199,30 @@ class G1EnvCfg_PLAY(G1EnvCfg):
         self.events.push_robot = None
 
 
+# === Leg Only Configs ===
+leg_joints = [
+    "left_hip_pitch_joint",
+    "left_hip_roll_joint",
+    "left_hip_yaw_joint",
+    "left_knee_joint",
+    "left_ankle_pitch_joint",
+    "left_ankle_roll_joint",
+
+    "right_hip_pitch_joint",
+    "right_hip_roll_joint",
+    "right_hip_yaw_joint",
+    "right_knee_joint",
+    "right_ankle_pitch_joint",
+    "right_ankle_roll_joint",
+]
+
+@configclass
+class LegOnlyActionsCfg(ActionsCfg):
+    """Action specifications for the MDP."""
+
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=leg_joints, scale=0.5, use_default_offset=True)
+
+
 class G1LegOnlyEnvCfg(G1EnvCfg):
     def __post_init__(self):
         super().__post_init__()
@@ -231,3 +232,6 @@ class G1LegOnlyEnvCfg_PLAY(G1EnvCfg_PLAY):
     def __post_init__(self):
         super().__post_init__()
         self.actions: ActionsCfg = LegOnlyActionsCfg()
+
+
+
