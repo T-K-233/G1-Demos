@@ -275,13 +275,18 @@ class G1ReachEnvCfg(G1EnvCfg):
         super().__post_init__()
         self.scene.table = AssetBaseCfg(
             prim_path="{ENV_REGEX_NS}/Table",
-            init_state=AssetBaseCfg.InitialStateCfg(pos=[1.0, 0, 1.05], rot=[1, 0, 0, 0]),
-            spawn=UsdFileCfg(usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/SeattleLabTable/table_instanceable.usd"),
+            init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.25, 0.7], rot=[0.707, 0, 0, -0.707]),
+            spawn=UsdFileCfg(usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/ThorlabsTable/table_instanceable.usd"),
         )
+        # self.scene.table = AssetBaseCfg(
+        #     prim_path="{ENV_REGEX_NS}/Table",
+        #     init_state=AssetBaseCfg.InitialStateCfg(pos=[1.0, 0, 1.05], rot=[1, 0, 0, 0]),
+        #     spawn=UsdFileCfg(usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/SeattleLabTable/table_instanceable.usd"),
+        # )
 
         self.scene.object = RigidObjectCfg(
             prim_path="{ENV_REGEX_NS}/Object",
-            init_state=RigidObjectCfg.InitialStateCfg(pos=[1.0, 0, 1.1], rot=[1, 0, 0, 0]),
+            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.5, 0, 1.1], rot=[1, 0, 0, 0]),
             spawn=UsdFileCfg(
                 usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Blocks/DexCube/dex_cube_instanceable.usd",
                 scale=(0.8, 0.8, 0.8),
