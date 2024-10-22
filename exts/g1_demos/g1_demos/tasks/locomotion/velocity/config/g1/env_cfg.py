@@ -1,13 +1,21 @@
+from dataclasses import MISSING
+
+from omni.isaac.lab.assets import AssetBaseCfg, DeformableObjectCfg, RigidObjectCfg
+from omni.isaac.lab.managers import EventTermCfg as EventTerm
 from omni.isaac.lab.managers import RewardTermCfg as RewTerm
 from omni.isaac.lab.managers import SceneEntityCfg
 from omni.isaac.lab.managers import TerminationTermCfg as DoneTerm
+from omni.isaac.lab.sim.spawners.from_files.from_files_cfg import UsdFileCfg
+from omni.isaac.lab.sim.schemas.schemas_cfg import RigidBodyPropertiesCfg
 from omni.isaac.lab.utils import configclass
+from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR, ISAACLAB_NUCLEUS_DIR
 
 import g1_demos.tasks.locomotion.velocity.mdp as mdp
 from g1_demos.tasks.locomotion.velocity.velocity_env_cfg import (
     LocomotionVelocityRoughEnvCfg,
     RewardsCfg,
     ActionsCfg,
+    EventCfg
 )
 
 ##
@@ -219,7 +227,6 @@ leg_joints = [
 @configclass
 class LegOnlyActionsCfg(ActionsCfg):
     """Action specifications for the MDP."""
-
     joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=leg_joints, scale=0.5, use_default_offset=True)
 
 
@@ -234,4 +241,74 @@ class G1LegOnlyEnvCfg_PLAY(G1EnvCfg_PLAY):
         self.actions: ActionsCfg = LegOnlyActionsCfg()
 
 
+# === Reach Configs ===
 
+@configclass
+class ArmOnlyActionsCfg(ActionsCfg):
+    """Action specifications for the MDP."""
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=[
+        "right_five_joint",
+        "right_three_joint",
+        "right_zero_joint",
+    ], scale=0.5, use_default_offset=True)
+
+
+@configclass
+class ReachEventCfg(EventCfg):
+    """Configuration for events."""
+    # reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
+
+    reset_object_position = EventTerm(
+        func=mdp.reset_root_state_uniform,
+        mode="reset",
+        params={
+            "pose_range": {"x": (-0.1, 0.1), "y": (-0.25, 0.25), "z": (0.0, 0.0)},
+            "velocity_range": {},
+            "asset_cfg": SceneEntityCfg("object", body_names="Object"),
+        },
+    )
+
+class G1ReachEnvCfg(G1EnvCfg):
+    events: ReachEventCfg = ReachEventCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.table = AssetBaseCfg(
+            prim_path="{ENV_REGEX_NS}/Table",
+            init_state=AssetBaseCfg.InitialStateCfg(pos=[1.0, 0, 1.05], rot=[1, 0, 0, 0]),
+            spawn=UsdFileCfg(usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/SeattleLabTable/table_instanceable.usd"),
+        )
+
+        self.scene.object = RigidObjectCfg(
+            prim_path="{ENV_REGEX_NS}/Object",
+            init_state=RigidObjectCfg.InitialStateCfg(pos=[1.0, 0, 1.1], rot=[1, 0, 0, 0]),
+            spawn=UsdFileCfg(
+                usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Blocks/DexCube/dex_cube_instanceable.usd",
+                scale=(0.8, 0.8, 0.8),
+                rigid_props=RigidBodyPropertiesCfg(
+                    solver_position_iteration_count=16,
+                    solver_velocity_iteration_count=1,
+                    max_angular_velocity=1000.0,
+                    max_linear_velocity=1000.0,
+                    max_depenetration_velocity=5.0,
+                    disable_gravity=False,
+                ),
+            ),
+        )
+
+        self.actions: ActionsCfg = ArmOnlyActionsCfg()
+
+        # fix the robot root in place
+        self.scene.robot.spawn.articulation_props.fix_root_link = True
+
+        self.events.reset_base.params = {
+            "pose_range": {"x": (-0.0, 0.0), "y": (-0.0, 0.0), "yaw": (-0.0, 0.0)},
+            "velocity_range": {
+                "x": (0.0, 0.0),
+                "y": (0.0, 0.0),
+                "z": (0.0, 0.0),
+                "roll": (0.0, 0.0),
+                "pitch": (0.0, 0.0),
+                "yaw": (0.0, 0.0),
+            },
+        }
