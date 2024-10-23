@@ -26,7 +26,7 @@ from omni.isaac.lab.utils import configclass
 from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 from omni.isaac.lab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 
-import g1_demos.tasks.manipulation.reach.mdp as mdp
+import g1_demos.tasks.manipulation.lift.mdp as mdp
 
 ##
 # Scene definition
@@ -34,7 +34,7 @@ import g1_demos.tasks.manipulation.reach.mdp as mdp
 
 
 @configclass
-class ReachSceneCfg(InteractiveSceneCfg):
+class LiftCubeSceneCfg(InteractiveSceneCfg):
     """Configuration for the scene with a robotic arm."""
 
     # world
@@ -68,7 +68,7 @@ class ReachSceneCfg(InteractiveSceneCfg):
 
     object = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/Object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=[0.5, 0, 1.1], rot=[1, 0, 0, 0]),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=[0.25, 0, 0.75], rot=[1, 0, 0, 0]),
         spawn=UsdFileCfg(
             usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Blocks/DexCube/dex_cube_instanceable.usd",
             scale=(0.8, 0.8, 0.8),
@@ -197,7 +197,7 @@ class RewardsCfg:
 
     reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
 
-    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.04}, weight=15.0)
+    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.74}, weight=15.0)
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
@@ -250,11 +250,11 @@ class CurriculumCfg:
 
 
 @configclass
-class ReachEnvCfg(ManagerBasedRLEnvCfg):
-    """Configuration for the reach end-effector pose tracking environment."""
+class LiftCubeEnvCfg(ManagerBasedRLEnvCfg):
+    """Configuration for the lift cube environment."""
 
     # Scene settings
-    scene: ReachSceneCfg = ReachSceneCfg(num_envs=4096, env_spacing=2.5)
+    scene: LiftCubeSceneCfg = LiftCubeSceneCfg(num_envs=4096, env_spacing=2.5)
     # Basic settings
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()

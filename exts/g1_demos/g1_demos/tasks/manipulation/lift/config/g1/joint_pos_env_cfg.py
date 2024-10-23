@@ -9,7 +9,7 @@ from omni.isaac.lab.sensors.frame_transformer.frame_transformer_cfg import Offse
 from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 
 
-import g1_demos.tasks.manipulation.reach.mdp as mdp
+import g1_demos.tasks.manipulation.lift.mdp as mdp
 
 ##
 # Pre-defined configs
@@ -18,7 +18,7 @@ from omni.isaac.lab.markers.config import FRAME_MARKER_CFG  # isort: skip
 from omni.isaac.lab_assets import FRANKA_PANDA_CFG  # isort: skip
 from omni.isaac.lab_assets import G1_MINIMAL_CFG  # isort: skip
 
-from g1_demos.tasks.manipulation.reach.reach_env_cfg import ReachEnvCfg
+from g1_demos.tasks.manipulation.lift.lift_env_cfg import LiftCubeEnvCfg
 
 ##
 # Environment configuration
@@ -26,7 +26,7 @@ from g1_demos.tasks.manipulation.reach.reach_env_cfg import ReachEnvCfg
 
 
 @configclass
-class G1ReachEnvCfg(ReachEnvCfg):
+class G1LiftCubeEnvCfg(LiftCubeEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
@@ -74,12 +74,12 @@ class G1ReachEnvCfg(ReachEnvCfg):
         marker_cfg.prim_path = "/Visuals/FrameTransformer"
         
         self.scene.ee_frame = FrameTransformerCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/torso_joint_link",
+            prim_path="{ENV_REGEX_NS}/Robot/pelvis",
             debug_vis=False,
             visualizer_cfg=marker_cfg,
             target_frames=[
                 FrameTransformerCfg.FrameCfg(
-                    prim_path="{ENV_REGEX_NS}/Robot/right_five_joint_link",
+                    prim_path="{ENV_REGEX_NS}/Robot/right_palm_link",
                     name="end_effector",
                     offset=OffsetCfg(
                         pos=[0.0, 0.0, 0.1034],
@@ -90,7 +90,7 @@ class G1ReachEnvCfg(ReachEnvCfg):
 
 
 @configclass
-class G1ReachEnvCfg_PLAY(G1ReachEnvCfg):
+class G1LiftCubeEnvCfg_PLAY(G1LiftCubeEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()

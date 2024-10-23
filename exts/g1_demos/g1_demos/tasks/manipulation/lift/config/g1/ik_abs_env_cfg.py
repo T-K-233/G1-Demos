@@ -16,7 +16,7 @@ from omni.isaac.lab_assets.franka import FRANKA_PANDA_HIGH_PD_CFG  # isort: skip
 
 
 @configclass
-class G1ReachEnvCfg(joint_pos_env_cfg.G1ReachEnvCfg):
+class G1LiftCubeEnvCfg(joint_pos_env_cfg.G1LiftCubeEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
@@ -30,14 +30,13 @@ class G1ReachEnvCfg(joint_pos_env_cfg.G1ReachEnvCfg):
             asset_name="robot",
             joint_names=["panda_joint.*"],
             body_name="panda_hand",
-            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=True, ik_method="dls"),
-            scale=0.5,
+            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=False, ik_method="dls"),
             body_offset=DifferentialInverseKinematicsActionCfg.OffsetCfg(pos=[0.0, 0.0, 0.107]),
         )
 
 
 @configclass
-class G1ReachEnvCfg_PLAY(G1ReachEnvCfg):
+class G1LiftCubeEnvCfg_PLAY(G1LiftCubeEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()

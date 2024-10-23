@@ -17,11 +17,11 @@ from .agents import rsl_rl_ppo_cfg
 ##
 
 gym.register(
-    id="Reach-G1-v0",
+    id="Lift-Cube-G1-v0",
     entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": joint_pos_env_cfg.G1ReachEnvCfg,
-        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1ReachPPORunnerCfg,
+        "env_cfg_entry_point": joint_pos_env_cfg.G1LiftCubeEnvCfg,
+        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1LiftCubePPORunnerCfg,
     },
 )

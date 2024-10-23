@@ -13,11 +13,11 @@ from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
 
 
 @configclass
-class G1ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class G1LiftCubePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 1000
     save_interval = 50
-    experiment_name = "g1_reach"
+    experiment_name = "g1_lift_cube"
     run_name = ""
     resume = False
     empirical_normalization = False
