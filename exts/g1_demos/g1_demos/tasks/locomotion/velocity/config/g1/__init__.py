@@ -48,3 +48,13 @@ gym.register(
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
     },
 )
+
+gym.register(
+    id="Velocity-G1-Reach-v0",
+    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": env_cfg.G1ReachEnvCfg,
+        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg.G1PPORunnerCfg,
+    },
+)
